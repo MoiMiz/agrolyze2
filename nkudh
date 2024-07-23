@@ -1,0 +1,110 @@
+//
+//  HomeView.swift
+//  AgroLyze
+//
+//  Created by Moises Mizrachi on 7/22/24.
+//
+import SwiftUI
+
+struct HomeView: View {
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Spacer()
+
+                // Logo
+                Image("agrolyze_just_logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150, height: 150)
+                    .padding(.bottom, 20)
+
+                // Title
+                Text("Welcome to AgroLyze")
+                    .font(.system(size: 36, weight: .bold, design: .serif))
+                    .foregroundColor(.brown)
+                    .padding(.horizontal)
+
+                // Description
+                Text("Revolutionizing Plant and Soil Care")
+                    .font(.system(size: 20, weight: .medium, design: .serif))
+                    .foregroundColor(.brown)
+                    .padding(.horizontal)
+                
+                Spacer()
+
+                // Navigation Links
+                Group {
+                    NavigationLink(destination: Text("What is AgroLyze?")) {
+                        HomeOptionView(title: "What is AgroLyze?", description: "Learn more about our app")
+                    }
+                    
+                    NavigationLink(destination: Text("Product Ideas")) {
+                        HomeOptionView(title: "Product Ideas", description: "Explore innovative features")
+                    }
+                    
+                    NavigationLink(destination: Text("Image Recognition")) {
+                        HomeOptionView(title: "Image Recognition", description: "Identify your plants using our AI model")
+                    }
+                    
+                    NavigationLink(destination: Text("Bluetooth Connection")) {
+                        HomeOptionView(title: "Bluetooth Connection", description: "Connect to soil health sensors")
+                    }
+                    
+                    NavigationLink(destination: Text("Weather Integration")) {
+                        HomeOptionView(title: "Weather Integration", description: "Get recommendations based on weather")
+                    }
+                    
+                    NavigationLink(destination: Text("Plant Recommendations")) {
+                        HomeOptionView(title: "Plant Recommendations", description: "Personalized plant suggestions")
+                    }
+                    
+                    NavigationLink(destination: Text("Soil Notifications")) {
+                        HomeOptionView(title: "Soil Notifications", description: "Stay updated with soil conditions")
+                    }
+                    
+                    NavigationLink(destination: Text("Reward System")) {
+                        HomeOptionView(title: "Reward System", description: "Earn points and rewards")
+                    }
+                }
+
+                Spacer()
+            }
+            .padding()
+            .background(
+                LinearGradient(gradient: Gradient(colors: [Color.white, Color.brown.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
+                    .edgesIgnoringSafeArea(.all)
+            )
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+struct HomeOptionView: View {
+    var title: String
+    var description: String
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.brown)
+            Text(description)
+                .font(.subheadline)
+                .foregroundColor(.gray)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(color: .gray.opacity(0.3), radius: 3, x: 0, y: 2)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 5)
+    }
+}
+
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+    }
+}
