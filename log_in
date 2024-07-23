@@ -1,0 +1,135 @@
+//
+//  LoginView.swift
+//  AgroLyze
+//
+//  Created by Moises Mizrachi on 7/22/24.
+//
+import SwiftUI
+
+struct LoginView: View {
+    @State private var firstName = ""
+    @State private var lastName = ""
+    @State private var email = ""
+    @State private var password = ""
+    @State private var confirmPassword = ""
+    @State private var showPassword = false
+    @State private var showConfirmPassword = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Spacer()
+
+            // Logo
+            Image("agrolyze_just_logo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 150, height: 150)
+                .padding(.bottom, 20)
+
+            // Title
+            Text("Login")
+                .font(.system(size: 36, weight: .bold, design: .serif))
+                .foregroundColor(.brown)
+                .padding(.horizontal)
+
+            Spacer()
+
+            // Form
+            Group {
+                TextField("First Name", text: $firstName)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+
+                TextField("Last Name", text: $lastName)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+
+                TextField("Email", text: $email)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+
+                HStack {
+                    if showPassword {
+                        TextField("Password", text: $password)
+                    } else {
+                        SecureField("Password", text: $password)
+                    }
+                    Button(action: {
+                        showPassword.toggle()
+                    }) {
+                        Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                            .foregroundColor(.gray)
+                    }
+                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(.horizontal, 20)
+
+                HStack {
+                    if showConfirmPassword {
+                        TextField("Re-enter Password", text: $confirmPassword)
+                    } else {
+                        SecureField("Re-enter Password", text: $confirmPassword)
+                    }
+                    Button(action: {
+                        showConfirmPassword.toggle()
+                    }) {
+                        Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
+                            .foregroundColor(.gray)
+                    }
+                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(.horizontal, 20)
+            }
+
+            Spacer()
+
+            // Button
+            Button(action: {
+                if password != confirmPassword {
+                    alertMessage = "Passwords do not match"
+                    showAlert = true
+                } else {
+                    print("Login button tapped")
+                    // Handle login logic here
+                }
+            }) {
+                Text("Login")
+                    .font(.system(size: 20, weight: .semibold, design: .serif))
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.brown)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+            }
+
+            Spacer()
+        }
+        .padding()
+        .background(
+            LinearGradient(gradient: Gradient(colors: [Color.white, Color.brown.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+        )
+    }
+}
+
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
+    }
+}
