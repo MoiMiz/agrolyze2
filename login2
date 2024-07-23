@@ -1,0 +1,194 @@
+import SwiftUI
+
+struct LoginView: View {
+    @State private var firstName = ""
+    @State private var lastName = ""
+    @State private var email = ""
+    @State private var password = ""
+    @State private var confirmPassword = ""
+    @State private var showPassword = false
+    @State private var showConfirmPassword = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    @State private var isLoading = false
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Spacer()
+
+            // Logo
+            Image("agrolyze_just_logo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 150, height: 150)
+                .padding(.bottom, 20)
+
+            // Title
+            Text("Login")
+                .font(.system(size: 36, weight: .bold, design: .serif))
+                .foregroundColor(.brown)
+                .padding(.horizontal)
+
+            Spacer()
+
+            // Form
+            Group {
+                TextField("First Name", text: $firstName)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+                    .shadow(color: .gray, radius: 1, x: 0, y: 1)
+
+                TextField("Last Name", text: $lastName)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+                    .shadow(color: .gray, radius: 1, x: 0, y: 1)
+
+                TextField("Email", text: $email)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+                    .shadow(color: .gray, radius: 1, x: 0, y: 1)
+                    .autocapitalization(.none)
+                    .keyboardType(.emailAddress)
+
+                HStack {
+                    if showPassword {
+                        TextField("Password", text: $password)
+                    } else {
+                        SecureField("Password", text: $password)
+                    }
+                    Button(action: {
+                        showPassword.toggle()
+                    }) {
+                        Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                            .foregroundColor(.gray)
+                    }
+                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(.horizontal, 20)
+                .shadow(color: .gray, radius: 1, x: 0, y: 1)
+
+                HStack {
+                    if showConfirmPassword {
+                        TextField("Re-enter Password", text: $confirmPassword)
+                    } else {
+                        SecureField("Re-enter Password", text: $confirmPassword)
+                    }
+                    Button(action: {
+                        showConfirmPassword.toggle()
+                    }) {
+                        Image(systemName: showConfirmPassword ? "eye.slash.fill" : "eye.fill")
+                            .foregroundColor(.gray)
+                    }
+                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .padding(.horizontal, 20)
+                .shadow(color: .gray, radius: 1, x: 0, y: 1)
+            }
+
+            Spacer()
+
+            // Button
+            Button(action: {
+                validateInputs()
+            }) {
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.brown)
+                        .cornerRadius(10)
+                        .padding(.horizontal, 20)
+                } else {
+                    Text("Login")
+                        .font(.system(size: 20, weight: .semibold, design: .serif))
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.brown)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .padding(.horizontal, 20)
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+            }
+
+            Spacer()
+        }
+        .padding()
+        .background(
+            LinearGradient(gradient: Gradient(colors: [Color.white, Color.brown.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
+        )
+    }
+
+    private func validateInputs() {
+        guard !firstName.isEmpty else {
+            alertMessage = "First Name is required"
+            showAlert = true
+            return
+        }
+
+        guard !lastName.isEmpty else {
+            alertMessage = "Last Name is required"
+            showAlert = true
+            return
+        }
+
+        guard !email.isEmpty else {
+            alertMessage = "Email is required"
+            showAlert = true
+            return
+        }
+
+        guard isValidEmail(email) else {
+            alertMessage = "Invalid Email format"
+            showAlert = true
+            return
+        }
+
+        guard !password.isEmpty else {
+            alertMessage = "Password is required"
+            showAlert = true
+            return
+        }
+
+        guard password == confirmPassword else {
+            alertMessage = "Passwords do not match"
+            showAlert = true
+            return
+        }
+
+        isLoading = true
+
+        // Simulate a login process
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            isLoading = false
+            print("Login button tapped")
+            // Handle login logic here
+        }
+    }
+
+    private func isValidEmail(_ email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: email)
+    }
+}
+
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
+    }
+}
