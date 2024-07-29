@@ -1,48 +1,190 @@
 import SwiftUI
 
-struct RecommendedPlantView: View {
-    var plant: Plant
-    
+struct LoginView: View {
     var body: some View {
-        ScrollView {
-            VStack(alignment: .center, spacing: 20) {
-                if let imageUrl = plant.imageUrl, let image = UIImage(named: imageUrl) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
+        NavigationView {
+            VStack {
+                Spacer()
+                
+                // App Logo
+                Image("appLogo") // Replace with your actual logo image name
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 150, height: 150)
+                    .padding()
+                
+                // App Slogan
+                Text("Your Garden, Our Passion")
+                    .font(.system(size: 24, weight: .bold, design: .serif))
+                    .foregroundColor(Color.brown)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Spacer()
+                
+                // Get Started Button
+                NavigationLink(destination: Text("Next View")) { // Placeholder for the next view
+                    Text("Get Started")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding()
                         .frame(maxWidth: .infinity)
+                        .background(Color.brown)
                         .cornerRadius(10)
-                        .padding()
+                        .padding(.horizontal, 40)
                 }
-                
-                Text(plant.name)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.top, 10)
-                
-                Text("Size: \(plant.size)")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                
-                Text("Location: \(plant.location)")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                
-                Text("Commitment Level: \(plant.commitmentLevel)")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                
-                if let description = plant.description {
-                    Text(description)
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                }
+                .padding(.bottom, 40)
                 
                 Spacer()
             }
-            .padding()
-            .navigationTitle(plant.name)
+            .background(Color("LightBrown").edgesIgnoringSafeArea(.all))
+            .navigationBarHidden(true)
         }
     }
 }
+
+@main
+struct AgroLyzeApp: App {
+    var body: some Scene {
+        WindowGroup {
+            LoginView()
+        }
+    }
+}
+
+
+import SwiftUI
+
+struct GetStartedView: View {
+    var body: some View {
+        VStack {
+            Spacer()
+            
+            // App Logo
+            Image("appLogo") // Replace with your actual logo image name
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 150, height: 150)
+                .padding()
+            
+            // App Slogan
+            Text("Your Garden, Our Passion")
+                .font(.system(size: 24, weight: .bold, design: .serif))
+                .foregroundColor(Color.brown)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+            
+            Spacer()
+            
+            // Get Started Button
+            Button(action: {
+                // Placeholder for future action
+                print("Get Started tapped")
+            }) {
+                Text("Get Started")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.brown)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 40)
+            }
+            .padding(.bottom, 40)
+            
+            Spacer()
+        }
+        .background(Color("LightBrown").edgesIgnoringSafeArea(.all))
+    }
+}
+
+@main
+struct AgroLyzeApp: App {
+    var body: some Scene {
+        WindowGroup {
+            GetStartedView()
+        }
+    }
+}
+
+
+import SwiftUI
+
+struct HomeView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Spacer()
+                
+                // App Logo
+                Image("appLogo") // Replace with your actual logo image name
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 150, height: 150)
+                    .padding()
+                
+                // Welcome Message or Slogan
+                Text("Welcome to AgroLyze")
+                    .font(.system(size: 28, weight: .bold, design: .serif))
+                    .foregroundColor(Color.brown)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Text("Your Garden, Our Passion")
+                    .font(.system(size: 20, weight: .medium, design: .serif))
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Spacer()
+                
+                // Navigation or Action Buttons
+                VStack(spacing: 20) {
+                    Button(action: {
+                        // Placeholder for navigation or action
+                        print("Explore Plants tapped")
+                    }) {
+                        Text("Explore Plants")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.brown)
+                            .cornerRadius(10)
+                            .padding(.horizontal, 40)
+                    }
+                    
+                    Button(action: {
+                        // Placeholder for navigation or action
+                        print("My Garden tapped")
+                    }) {
+                        Text("My Garden")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .cornerRadius(10)
+                            .padding(.horizontal, 40)
+                    }
+                }
+                .padding(.bottom, 40)
+                
+                Spacer()
+            }
+            .background(Color("LightBrown").edgesIgnoringSafeArea(.all))
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+@main
+struct AgroLyzeApp: App {
+    var body: some Scene {
+        WindowGroup {
+            HomeView()
+        }
+    }
+}
+
+
