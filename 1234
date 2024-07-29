@@ -1,49 +1,115 @@
 import SwiftUI
 
-struct RecommendedPlantView: View {
-    var plant: Plant
+struct Plant: Identifiable {
+    var id = UUID()
+    var name: String
+    var size: String
+    var location: String
+    var commitmentLevel: String
+    var description: String? // Optional description
+    var imageUrl: String? // Optional image URL
+}
+
+class PlantViewModel: ObservableObject {
+    @Published var plants: [Plant] = []
+    @Published var recommendedPlants: [Plant] = []
     
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .center, spacing: 20) {
-                if let imageUrl = plant.imageUrl, let image = UIImage(named: imageUrl) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity)
-                        .cornerRadius(10)
-                        .padding()
-                }
-                
-                Text(plant.name)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.top, 10)
-                
-                Text("Size: \(plant.size)")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                
-                Text("Location: \(plant.location)")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                
-                Text("Commitment Level: \(plant.commitmentLevel)")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                
-                if let description = plant.description {
-                    Text(description)
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                }
-                
-                Spacer()
-            }
-            .padding()
-            .navigationTitle(plant.name)
+    init() {
+        loadPlants()
+    }
+    
+    func loadPlants() {
+        plants = [
+            Plant(name: "Spider Plant", size: "Small", location: "Indoor", commitmentLevel: "Low", description: "Easy to care for, air-purifying", imageUrl: "spiderplant.jpg"),
+            Plant(name: "Snake Plant", size: "Medium", location: "Indoor", commitmentLevel: "Low", description: "Low maintenance, great for beginners", imageUrl: "snakeplant.jpg"),
+            Plant(name: "Peace Lily", size: "Medium", location: "Indoor", commitmentLevel: "Medium", description: "Beautiful white flowers", imageUrl: "peacelily.jpg"),
+            Plant(name: "Aloe Vera", size: "Small", location: "Indoor", commitmentLevel: "Low", description: "Medicinal plant, needs bright light", imageUrl: "aloevera.jpg"),
+            Plant(name: "Fiddle Leaf Fig", size: "Large", location: "Indoor", commitmentLevel: "High", description: "Popular indoor tree", imageUrl: "fiddleleaffig.jpg"),
+            // Add more plants here...
+        ]
+    }
+    
+    func filterPlants(location: String, commitmentLevel: String, size: String) {
+        recommendedPlants = plants.filter { plant in
+            plant.location == location && plant.commitmentLevel == commitmentLevel && plant.size == size
         }
     }
 }
 
+struct PlantListView: View {
+    @StateObject private var viewModel = PlantViewModel()
+    @State private var selectedLocation = "Indoor"
+    @State private var selectedCommitmentLevel = "Low"
+    @State private var selectedSize = "Small"
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Form {
+                    Section(header: Text("Location")) {
+                        Picker("Location", selection: $selectedLocation) {
+                            Text("Indoor").tag("Indoor")
+                            Text("Outdoor").tag("Outdoor")
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                    }
+                    
+                    Section(header: Text("Commitment Level")) {
+                        Picker("Commitment Level", selection: $selectedCommitmentLevel) {
+                            Text("Low").tag("Low")
+                            Text("Medium").tag("Medium")
+                            Text("High").tag("High")
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                    }
+                    
+                    Section(header: Text("Plant Size")) {
+                        Picker("Plant Size", selection: $selectedSize) {
+                            Text("Small").tag("Small")
+                            Text("Medium").tag("Medium")
+                            Text("Large").tag("Large")
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                    }
+                    
+                    Button(action: {
+                        viewModel.filterPlants(location: selectedLocation, commitmentLevel: selectedCommitmentLevel, size: selectedSize)
+                    }) {
+                        Text("Get Recommendations")
+                            .font(.system(size: 20, weight: .semibold))
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.brown)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .padding(.horizontal, 20)
+                    }
+                }
+                
+                List(viewModel.recommendedPlants) { plant in
+                    NavigationLink(destination: RecommendedPlantView(plant: plant)) {
+                        HStack {
+                            if let imageUrl = plant.imageUrl, let image = UIImage(named: imageUrl) {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                            }
+                            VStack(alignment: .leading) {
+                                Text(plant.name)
+                                    .font(.headline)
+                                if let description = plant.description {
+                                    Text(description)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                        .padding(.vertical, 5)
+                    }
+                }
+            }
+            .navigationTitle("Plant Recommendations")
+        }
+    }
+}
