@@ -1,11 +1,27 @@
 import SwiftUI
 
-struct Plant: Identifiable {
-    var id = UUID()
-    var name: String
-    var size: String
-    var location: String
-    var commitmentLevel: String
-    var description: String? // Optional description
-    var imageUrl: String? // Optional image URL
+class PlantViewModel: ObservableObject {
+    @Published var plants: [Plant] = []
+    @Published var recommendedPlants: [Plant] = []
+    
+    init() {
+        loadPlants()
+    }
+    
+    func loadPlants() {
+        plants = [
+            Plant(name: "Spider Plant", size: "Small", location: "Indoor", commitmentLevel: "Low", description: "Easy to care for, air-purifying", imageUrl: "spiderplant.jpg"),
+            Plant(name: "Snake Plant", size: "Medium", location: "Indoor", commitmentLevel: "Low", description: "Low maintenance, great for beginners", imageUrl: "snakeplant.jpg"),
+            Plant(name: "Peace Lily", size: "Medium", location: "Indoor", commitmentLevel: "Medium", description: "Beautiful white flowers", imageUrl: "peacelily.jpg"),
+            Plant(name: "Aloe Vera", size: "Small", location: "Indoor", commitmentLevel: "Low", description: "Medicinal plant, needs bright light", imageUrl: "aloevera.jpg"),
+            Plant(name: "Fiddle Leaf Fig", size: "Large", location: "Indoor", commitmentLevel: "High", description: "Popular indoor tree", imageUrl: "fiddleleaffig.jpg"),
+            // Add more plants here...
+        ]
+    }
+    
+    func filterPlants(location: String, commitmentLevel: String, size: String) {
+        recommendedPlants = plants.filter { plant in
+            plant.location == location && plant.commitmentLevel == commitmentLevel && plant.size == size
+        }
+    }
 }
