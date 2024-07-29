@@ -1,48 +1,53 @@
 import SwiftUI
 
-struct RecommendedPlantView: View {
-    var plant: Plant
-    
+struct LoginView: View {
     var body: some View {
-        ScrollView {
-            VStack(alignment: .center, spacing: 20) {
-                if let imageUrl = plant.imageUrl, let image = UIImage(named: imageUrl) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
+        NavigationView {
+            VStack {
+                Spacer()
+                
+                // App Logo
+                Image("appLogo") // Replace with your actual logo image name
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 150, height: 150)
+                    .padding()
+                
+                // App Slogan
+                Text("Your Garden, Our Passion")
+                    .font(.system(size: 24, weight: .bold, design: .serif))
+                    .foregroundColor(Color.brown)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+                
+                Spacer()
+                
+                // Get Started Button
+                NavigationLink(destination: PlantListView()) {
+                    Text("Get Started")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding()
                         .frame(maxWidth: .infinity)
+                        .background(Color.brown)
                         .cornerRadius(10)
-                        .padding()
+                        .padding(.horizontal, 40)
                 }
-                
-                Text(plant.name)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.top, 10)
-                
-                Text("Size: \(plant.size)")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                
-                Text("Location: \(plant.location)")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                
-                Text("Commitment Level: \(plant.commitmentLevel)")
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                
-                if let description = plant.description {
-                    Text(description)
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                }
+                .padding(.bottom, 40)
                 
                 Spacer()
             }
-            .padding()
-            .navigationTitle(plant.name)
+            .background(Color("LightBrown").edgesIgnoringSafeArea(.all))
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+@main
+struct AgroLyzeApp: App {
+    var body: some Scene {
+        WindowGroup {
+            LoginView() // Start with the login view
         }
     }
 }
